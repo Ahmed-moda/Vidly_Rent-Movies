@@ -1,0 +1,45 @@
+﻿@model Vidly_2.Models.moviegenre
+@{
+    ViewBag.Title = "mov_form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>mov_form</h2>
+
+@using (Html.BeginForm("Save", "Movies"))
+{
+
+    <div class="form-group">
+
+        @Html.LabelFor(c => c.movie.Name)
+        @Html.TextBoxFor(c => c.movie.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m=>m.movie.Name)
+    </div>
+
+    <div class="form-group">
+
+        @Html.LabelFor(c => c.movie.releasedate)
+        @Html.TextBoxFor(c => c.movie.releasedate, "{0:dd MMM yyyy}", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.movie.releasedate)
+
+    </div>
+
+    <div class="form-group">
+
+        @Html.LabelFor(c => c.movie.Genreid)
+        @Html.DropDownListFor(c => c.movie.Genreid, new SelectList(Model.genre, "id", "Name"), "choose Genre", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m=>m.movie.Genreid)
+    </div>
+
+    <div class="form-group">
+
+        @Html.LabelFor(c => c.movie.nstok)
+        @Html.TextBoxFor(c => c.movie.nstok, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m=>m.movie.nstok)
+    </div>
+
+    @Html.HiddenFor(m => m.movie.id)
+
+    <button type="submit" class="btn btn-primary">Save</button>
+
+}

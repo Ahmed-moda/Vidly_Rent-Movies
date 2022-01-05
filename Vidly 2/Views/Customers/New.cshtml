@@ -1,0 +1,78 @@
+﻿@model Vidly_2.Viewmodel.NewCustomerMembership
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Customer</h2>
+@using (Html.BeginForm(null, null,FormMethod.Post, new { id = "blh" }))
+{
+    <div class="form-group">
+
+        @Html.LabelFor(c => c.customer.Name)
+        @Html.TextBoxFor(c => c.customer.Name, new { @class = "form-control", id = "cusname" })
+        @Html.ValidationMessageFor(m => m.customer.Name)
+    </div>
+
+    <div class="form-group">
+
+        @Html.LabelFor(c => c.customer.BirthDate)
+        @Html.TextBoxFor(c => c.customer.BirthDate, "{0:dd MMM yyyy}", new { @class = "form-control", id = "birth"})
+        @Html.ValidationMessageFor(c => c.customer.BirthDate)
+    </div>
+
+    <div class="checkbox">
+        <label>
+            @Html.CheckBoxFor(c => c.customer.issubs, new { id = "issub" }) is subscribed
+        </label>
+
+    </div>
+
+    <div class="form-group">
+
+        @Html.LabelFor(c => c.customer.Membershipid)
+        @Html.DropDownListFor(c => c.customer.Membershipid, new SelectList(Model.memberships, "id", "Name"), "Select Membership Type", new { @class = "form-control", id = "memid" })
+    </div>
+    @Html.HiddenFor(c => c.customer.id,new {id="cusid"});
+    @Html.AntiForgeryToken()
+    <button id="save" type="submit" class="btn btn-primary">Save</button>
+
+}
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            
+            $("#blh").submit(function (e) {
+
+                e.preventDefault();
+                var vm = {
+                id: $('#cusid').val(),
+                Name:$('#cusname').val(),
+                issub:$("#issub").val(),
+                BirthDate: $("#birth").val(),
+                Membershipid: $("#memid").val()
+                }
+                console.log(vm);
+
+                $.ajax({
+                    url: "/api/customers",
+                    method: "POST",
+                    data: vm
+                })
+                    .done(function () {
+                        console.log("done")
+                        window.location.replace("https://localhost:44389/Customers/Index");
+                    })
+                    .fail(function () {
+                        console.log("a7a");
+                    });
+
+            });
+            
+            
+        });
+    </script>
+}
+
